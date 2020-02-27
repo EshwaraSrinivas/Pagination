@@ -1,6 +1,6 @@
 export interface IProps {
-    items: any[],
-    onChangePage: (pageOfItems: any[]) => void,
+    totalItems: number,
+    onChangePage: (pageNumber: number) => void,
     initialPage: number,
     pageSize: number,
     maxPages: number,

@@ -26,27 +26,27 @@ class Pagination extends React.Component<IProps, IState> {
     }
 
     componentWillMount() {
-        if (this.props.items && this.props.items.length) {
+        if (this.props.totalItems) {
             this.setPage(this.props.initialPage);
         }
     }
 
     componentDidUpdate(prevProps: IProps, prevState: IState) {
-        if (this.props.items !== prevProps.items) {
+        if (this.props.totalItems !== prevProps.totalItems) {
             this.setPage(this.props.initialPage);
         }
     }
 
     setPage(page: number) {
-        var { items, pageSize, maxPages } = this.props;
+        var { totalItems, pageSize, maxPages } = this.props;
         var pager = this.state.pager;
         if (page < 1 || page > pager.totalPages) {
             return;
         }
-        pager = this.getPager(items.length, page, pageSize, maxPages);
-        let pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+        pager = this.getPager(totalItems, page, pageSize, maxPages);
+        // let pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
         this.setState({ pager: pager });
-        this.props.onChangePage(pageOfItems);
+        this.props.onChangePage(page);
     }
 
     getPager(totalItems: number, currentPage: number, pageSize: number, maxPages: number) {
@@ -76,8 +76,6 @@ class Pagination extends React.Component<IProps, IState> {
                 endPage = currentPage + maxPagesAfterCurrentPage;
               }
             }
-            let startIndex = (currentPage - 1) * pageSize;
-            let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
             let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
             return {
               totalItems: totalItems,
@@ -86,8 +84,6 @@ class Pagination extends React.Component<IProps, IState> {
               totalPages: totalPages,
               startPage: startPage,
               endPage: endPage,
-              startIndex: startIndex,
-              endIndex: endIndex,
               pages: pages
             };
           }
